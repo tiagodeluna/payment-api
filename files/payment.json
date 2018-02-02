@@ -1,0 +1,6 @@
+{
+    "payment_method":"payfast",
+    "amount":20.00,
+    "currency":"USD",
+    "description":"Fantasy book"
+}
