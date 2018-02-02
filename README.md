@@ -1,2 +1,3 @@
-# payment-api
-Small payment API developed in node.js
+# Payfast
+
+This is a simple payment API developed during my studies of node.js
