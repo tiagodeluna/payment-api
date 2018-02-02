@@ -1,4 +1,4 @@
-# NODE PROJECT CREATION
+# PROJECT CREATION
 
 ## PREREQUISITES
 
@@ -8,12 +8,12 @@
 
 ## CREATION STEPS
 
-| STEP | COMMAND | ACTION |
-| ----- | ----- | ----- |
-| 1 | `npm init` | Create a package.json for a new project |
-| 2 | `npm install --save express` | Add Express package as a dependency |
-| 3 | `npm install --save consign` | Add Consign package as a dependency |
-| 4 | `npm install --save body-parser` | Add Body Parser package as a dependency |
-| 5 | `npm install --save mysql` | Add MySQL package as a dependency |
-| 6 | `npm install --save express-validator` | Add Express Validator package as a dependency |
-| 7 | -- | Create the main file: index.js |
+1. Run `npm init` to create a package.json for a new project
+2. Run `npm install --save <package name>` to install each of the following npm packages as project dependencies:
+    - express
+    - express-validator
+    - consign
+    - body-parser
+    - mysql
+    - restify
+3. Create the main file: index.js
