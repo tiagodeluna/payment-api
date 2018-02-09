@@ -53,31 +53,35 @@ module.exports = function(app){
                 //Process card authorization
                 if (payment.payment_method == "card") {
                     var card = req.body["card"];
+
+                    var cardClient = new app.services.cardClient();
+
                     cardClient.post(card);
                     return;
+                } else {
+
+                    //Return new locaton available after insertion into MySQL db
+                    res.location('/api/payments/payment/'+payment.id);
+
+                    //Create a response wrapper following HATEOAS format
+                    var response = {
+                        data: payment,
+                        links:[
+                            {
+                                href:'http://localhost:3000/api/payments/payment/'+payment.id,
+                                rel:'confirm',
+                                method:'PUT'
+                            },
+                            {
+                                href:'http://localhost:3000/api/payments/payment/'+payment.id,
+                                rel:'cancel',
+                                method:'DELETE'
+                            }
+                        ]
+                    }
+
+                    res.status(201).json(response);
                 }
-
-                //Return new locaton available after insertion into MySQL db
-                res.location('/api/payments/payment/'+payment.id);
-
-                //Create a response wrapper following HATEOAS format
-                var response = {
-                    data: payment,
-                    links:[
-                        {
-                            href:'http://localhost:3000/api/payments/payment/'+payment.id,
-                            rel:'confirm',
-                            method:'PUT'
-                        },
-                        {
-                            href:'http://localhost:3000/api/payments/payment/'+payment.id,
-                            rel:'cancel',
-                            method:'DELETE'
-                        }
-                    ]
-                }
-
-                res.status(201).json(response);
             }
         });
     });
