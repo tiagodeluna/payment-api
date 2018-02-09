@@ -1,6 +1,15 @@
 {
-    "payment_method":"payfast",
-    "amount":20.00,
-    "currency":"USD",
-    "description":"Fantasy book"
+    "payment": {
+        "payment_method":"card",
+        "amount":20.00,
+        "currency":"USD",
+        "description":"Expensive stuff"
+    },
+    "card": {
+        "flag":"visa",
+        "number":1234123412341234,
+        "expiration_year":2016,
+        "expiration_month":12,
+        "cvv":123
+    }
 }

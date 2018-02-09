@@ -25,10 +25,8 @@ module.exports = function(app){
         console.log('Processing Payment request...');
 
         //Validate payment on the request using express-validator
-        console.log(req.body.payment_method);
-        console.log(req.body.amount);
-        req.assert("payment_method", "Payment method is required").notEmpty();
-        req.assert("amount", "Amount has to be a valid float value").notEmpty().isFloat();
+        req.assert("payment.payment_method", "Payment method is required").notEmpty();
+        req.assert("payment.amount", "Amount has to be a valid float value").notEmpty().isFloat();
         var errors = req.validationErrors();
 
         if (errors) {
@@ -37,7 +35,7 @@ module.exports = function(app){
             return;
         }
 
-        var payment = req.body;
+        var payment = req.body["payment"];
 
         payment.status = 'CREATED';
         payment.payment_date = new Date();
@@ -51,6 +49,14 @@ module.exports = function(app){
             } else {
                 console.log('Payment created');
                 payment.id = result.insertId;
+
+                //Process card authorization
+                if (payment.payment_method == "card") {
+                    var card = req.body["card"];
+                    cardClient.post(card);
+                    return;
+                }
+
                 //Return new locaton available after insertion into MySQL db
                 res.location('/api/payments/payment/'+payment.id);
 
