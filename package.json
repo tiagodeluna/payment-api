@@ -19,6 +19,7 @@
     "express": "^4.16.2",
     "express-validator": "^4.3.0",
     "mysql": "^2.15.0",
-    "restify": "^6.3.4"
+    "restify": "^6.3.4",
+    "restify-clients": "^1.5.2"
   }
 }

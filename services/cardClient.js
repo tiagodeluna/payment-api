@@ -1,14 +1,13 @@
-var restify = require("restify");
+var restify = require("restify-clients");
 
 function CardClient() {
-    var client = restify.createJsonClient({
+    this._client = restify.createJsonClient({
         url:"http://localhost:3001"
     });
+}
 
-    client.post("/api/cards/authorize", function authorizeCard(error, req, res, result){
-        console.log("Consuming cards service...");
-        console.log(result);
-    });
+CardClient.prototype.authorize = function(card, callback) {
+	this._client.post("/api/cards/authorize", callback);
 }
 
 module.exports = function(){

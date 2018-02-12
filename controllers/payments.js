@@ -24,6 +24,7 @@ module.exports = function(app){
     app.post('/api/payments/payment', function createPayment(req, res){
         console.log('Processing Payment request...');
 
+        /*VALIDATION*/
         //Validate payment on the request using express-validator
         req.assert("payment.payment_method", "Payment method is required").notEmpty();
         req.assert("payment.amount", "Amount has to be a valid float value").notEmpty().isFloat();
@@ -35,14 +36,17 @@ module.exports = function(app){
             return;
         }
 
+        /*OBJECT CREATION*/
         var payment = req.body["payment"];
 
         payment.status = 'CREATED';
         payment.payment_date = new Date();
 
+        /*PERSISTENCE*/
         var paymentDAO = getDAO(app);
 
         paymentDAO.save(payment, function postSaving(error, result) {
+            /*ERROR HANDLING*/
             if (error) {
                 console.error('Error during Payment saving', error);
                 res.status(500).send(error);
@@ -50,16 +54,51 @@ module.exports = function(app){
                 console.log('Payment created');
                 payment.id = result.insertId;
 
+                /*CARD PROCESSING*/
                 //Process card authorization
                 if (payment.payment_method == "card") {
                     var card = req.body["card"];
 
                     var cardClient = new app.services.cardClient();
+                    cardClient.authorize(card,
+                        function postAuthorization(errorCardClient, reqCardClient, resCardClient, resultCardClient) {
+                            if (errorCardClient) {
+                                console.log(errorCardClient);
+                                res.status(400).send(errorCardClient);
+                                return;
+                            }
 
-                    cardClient.post(card);
-                    return;
+                            console.log("Consuming cards service...");
+                            console.log(resultCardClient);
+
+                            /*RESPONSE CREATION*/
+                            //Return new locaton available after insertion into MySQL db
+                            res.location('/api/payments/payment/'+payment.id);
+
+                            //Create a response wrapper following HATEOAS format
+                            var response = {
+                                data: payment,
+                                card: resultCardClient,
+                                links:[
+                                    {
+                                        href:'http://localhost:3000/api/payments/payment/'+payment.id,
+                                        rel:'confirm',
+                                        method:'PUT'
+                                    },
+                                    {
+                                        href:'http://localhost:3000/api/payments/payment/'+payment.id,
+                                        rel:'cancel',
+                                        method:'DELETE'
+                                    }
+                                ]
+                            }
+
+                            res.status(201).json(response);
+                            return;
+                        }
+                    );
                 } else {
-
+                    /*RESPONSE CREATION*/
                     //Return new locaton available after insertion into MySQL db
                     res.location('/api/payments/payment/'+payment.id);
 

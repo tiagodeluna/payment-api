@@ -15,5 +15,5 @@
     - consign
     - body-parser
     - mysql
-    - restify
+    - restify-clients
 3. Create the main file: index.js
