@@ -7,7 +7,7 @@ function CardClient() {
 }
 
 CardClient.prototype.authorize = function(card, callback) {
-	this._client.post("/api/cards/authorize", callback);
+	this._client.post("/api/cards/authorize", card, callback);
 }
 
 module.exports = function(){

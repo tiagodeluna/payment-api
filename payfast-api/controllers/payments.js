@@ -61,15 +61,15 @@ module.exports = function(app){
 
                     var cardClient = new app.services.cardClient();
                     cardClient.authorize(card,
-                        function postAuthorization(errorCardClient, reqCardClient, resCardClient, resultCardClient) {
-                            if (errorCardClient) {
-                                console.log(errorCardClient);
-                                res.status(400).send(errorCardClient);
+                        function authorizationCallback(errorAuth, reqAuth, resAuth, resultAuth) {
+                            if (errorAuth) {
+                                console.log(errorAuth);
+                                res.status(400).send(errorAuth);
                                 return;
                             }
 
                             console.log("Consuming cards service...");
-                            console.log(resultCardClient);
+                            console.log(resultAuth);
 
                             /*RESPONSE CREATION*/
                             //Return new locaton available after insertion into MySQL db
@@ -78,7 +78,7 @@ module.exports = function(app){
                             //Create a response wrapper following HATEOAS format
                             var response = {
                                 data: payment,
-                                card: resultCardClient,
+                                card: resultAuth,
                                 links:[
                                     {
                                         href:'http://localhost:3000/api/payments/payment/'+payment.id,
