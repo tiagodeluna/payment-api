@@ -1,16 +1,19 @@
 var soap = require("soap");
 
-soap.createClient("http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx?wsdl",
-	//For SOAP services, the instance is returned as a parameter in the callback
-	function (error, client){
-		console.log("SOAP Client created");
-		client.CalcPrazo(
-			{"nCdServico":"40010",
-			"sCepOrigem":"59152820",
-			"sCepDestino":"04101300"},
-			function(errorCalcPrazo, result){
-				console.log(JSON.stringify(result));
-			}
-		);
-	}
-);
+function CorreiosSOAPClient() {
+	this._url = "http://ws.correios.com.br/calculador/CalcPrecoPrazo.asmx?wsdl";
+}
+
+CorreiosSOAPClient.prototype.calculateDate = function(args, callback){
+	//For SOAP services, the method is called immediately after instantiation, so
+	// the service instance (client) is returned as a parameter in the callback
+	soap.createClient(this._url, function (error, client){
+			console.log("SOAP Client created");
+			//Calls the WS method
+			client.CalcPrazo(args, callback);
+		});
+}
+
+module.exports = function(){
+	return CorreiosSOAPClient;
+}

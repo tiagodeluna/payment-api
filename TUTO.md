@@ -16,4 +16,5 @@
     - body-parser
     - mysql
     - restify-clients
+    - soap
 3. Create the main file: index.js
