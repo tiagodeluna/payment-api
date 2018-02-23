@@ -144,6 +144,24 @@ module.exports = function(app){
         });
     });
 
+    app.get("/api/payments/payment/:id", function postFind(req, res){
+        var id = req.params.id;
+        console.log("Searching payment "+ id);
+
+        var paymentDAO = getDAO(app);
+
+        paymentDAO.findById(id, function postFindById(error, result) {
+            if (error) {
+                console.error('Error searching Payment with id: ' + id, error);
+                res.status(500).send(error);
+                return;
+            } else {
+                console.log("Payment found: " + JSON.stringify(result));
+                res.json(result);
+            }
+        });
+    });
+
     app.delete('/api/payments/payment/:id', function cancelPayment(req, res){
         console.log("Canceling payment...");
 
