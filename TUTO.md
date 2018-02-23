@@ -17,4 +17,8 @@
     - mysql
     - restify-clients
     - soap
-3. Create the main file: index.js
+    - memcached
+3. Install Memcached application:
+    - Linux: https://cursos.alura.com.br/course/nodejs-avancado/task/19586
+    - Mac/Windows: https://cursos.alura.com.br/course/nodejs-avancado/task/19590
+4. Create the main file: index.js
