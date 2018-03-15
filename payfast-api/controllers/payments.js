@@ -54,6 +54,16 @@ module.exports = function(app){
                 console.log('Payment created');
                 payment.id = result.insertId;
 
+                /*SET INTO CACHE*/
+                var memcachedClient = app.services.memcachedClient();
+                memcachedClient.set("payment-"+payment.id,
+                    payment,
+                    60000,
+                    function callback(error){
+                        console.log("New Payment added to cache: payment-"+payment.id);
+                    }
+                );
+
                 /*CARD PROCESSING*/
                 //Process card authorization
                 if (payment.payment_method == "card") {
@@ -148,18 +158,36 @@ module.exports = function(app){
         var id = req.params.id;
         console.log("Searching payment "+ id);
 
-        var paymentDAO = getDAO(app);
+        var memcachedClient = app.services.memcachedClient();
 
-        paymentDAO.findById(id, function postFindById(error, result) {
-            if (error) {
-                console.error('Error searching Payment with id: ' + id, error);
-                res.status(500).send(error);
-                return;
+        //GET PAYMENT FROM CACHE
+        memcachedClient.get("payment-" + id, function callback(error, result){
+            if (error || !result) {
+                console.log("MISS - Payment ID not found");
+
+                //GET PAYMENT FROM DB
+                var paymentDAO = getDAO(app);
+
+                paymentDAO.findById(id, function postFindById(error, result) {
+                    if (error) {
+                        console.error('Error searching Payment with id: ' + id, error);
+                        console.log("PORRA!");
+                        res.status(500).send(error);
+                        return;
+                    }
+
+                    console.log("Payment found: " + JSON.stringify(result));
+                    res.json(result);
+                    return;
+                });
             } else {
-                console.log("Payment found: " + JSON.stringify(result));
+                //Cache hit
+                console.log("HIT - value: " + JSON.stringify(result));
                 res.json(result);
+                return;
             }
         });
+
     });
 
     app.delete('/api/payments/payment/:id', function cancelPayment(req, res){

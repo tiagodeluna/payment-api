@@ -1,7 +1,16 @@
 var memcached = require("memcached");
 
+/*
+Memcached is a free, open source, and high-performing framework for caching objects in memory. It is generic
+ by nature, but with a strong intention to accelerate the processing of dynamic web applications, easing the
+ load of access to the database.
+
+It works based on a key-value scheme that stores small pieces of data of any desired type (string, objects ...)
+ in memory. This data may come from database queries, other APIs, or even from page loading.
+*/
+
 module.exports = function(){
-	return createMemcachedClient();
+	return createMemcachedClient;
 }
 
 function createMemcachedClient(){
@@ -15,15 +24,6 @@ function createMemcachedClient(){
 }
 
 //Add object to cache
-client.set("payment-2", {"id":2}, 600000, function callback(error){
-    console.log("New key added to cache");
-});
-
-//Get object in cache by key
-client.get("payment-2", function callback(error, result){
-    if (error || !result) {
-        console.log("MISS - Key not found");
-    } else {
-        console.log("HIT - value: " + JSON.stringify(result));
-    }
-});
+//client.set("payment-2", {"id":2}, 600000, function callback(error){
+//    console.log("New key added to cache");
+//});
