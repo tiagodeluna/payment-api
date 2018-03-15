@@ -1,10 +1,18 @@
 var memcached = require("memcached");
 
-var client = new memcached("localhost:11211", {
-    retries: 10, //number of retries
-    retry: 10000, //intreval to retry a failed node
-    remove: true //to remove dead nodes
-});
+module.exports = function(){
+	return createMemcachedClient();
+}
+
+function createMemcachedClient(){
+	var client = new memcached("localhost:11211", {
+	    retries: 10, //number of retries
+	    retry: 10000, //intreval to retry a failed node
+	    remove: true //to remove dead nodes
+	});
+
+	return client;
+}
 
 //Add object to cache
 client.set("payment-2", {"id":2}, 600000, function callback(error){
