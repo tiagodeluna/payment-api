@@ -18,6 +18,8 @@
     - restify-clients
     - soap
     - memcached
+    - winston
+    - morgan
 3. Install Memcached application:
     - Linux: https://cursos.alura.com.br/course/nodejs-avancado/task/19586
     - Mac/Windows: https://cursos.alura.com.br/course/nodejs-avancado/task/19590

@@ -1,3 +1,4 @@
+var logger = require("../services/logger.js");
 
 function getDAO(app) {
     var connection = app.persistence.connectionFactory();
@@ -8,6 +9,7 @@ module.exports = function(app){
     //GET all payments
     app.get('/api/payments', function findAllPayments(req, res){
         console.log("Listing payments...");
+        logger.info("Listing payments...");
 
         var paymentDAO = getDAO(app);
 
