@@ -8,8 +8,8 @@ var logger = require("../services/logger.js");
 module.exports = function() {
     var app = express();
 
-    //Add Morgan midware to intercept requests and generate logs
-    // using Winston (from logger.js)
+    //Add Morgan middleware to intercept requests and generate automatic
+    // logs using Winston (from logger.js)
     app.use(morgan(
         "common", //Log format according to Apache commons definition
         { stream: {
@@ -19,7 +19,7 @@ module.exports = function() {
         }}
     ));
 
-    //Add midwares to handle URL enconded and JSON formats
+    //Add middlewares to handle URL enconded and JSON formats
     app.use(bodyParser.urlencoded({extended:true}));
     app.use(bodyParser.json());
     //Add validation implementation to the request objects
