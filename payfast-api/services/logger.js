@@ -8,6 +8,7 @@ if (!fs.existsSync("logs")) {
 
 var logger = new winston.Logger({
 	transports: [
+		new winston.transports.Console(),
 		new winston.transports.File({
 			name: "log1",
 			level: "info",

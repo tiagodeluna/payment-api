@@ -1,9 +1,10 @@
+var logger = require("../services/logger.js");
 var fs = require("fs");
 
 module.exports = function(app){
 
 	app.post("/api/upload/image", function(req, res){
-		console.log("Receiving image");
+		logger.info("Receiving image");
 
 		var filename = req.headers.filename;
 
@@ -12,7 +13,7 @@ module.exports = function(app){
 		req.pipe(fs.createWriteStream("files/"+filename))
 			//Listener for finishing the process
 			.on("finish", function(){
-				console.log("File written");
+				logger.info("File written");
 				res.status(201).send("Finished!");
 			});
 

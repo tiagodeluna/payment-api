@@ -1,3 +1,5 @@
+var logger = require("../services/logger.js");
+
 module.exports = function(app) {
 
 	app.post("/api/delivery/calculate-date", function(req, res){
@@ -6,10 +8,11 @@ module.exports = function(app) {
 		correiosSOAPClient.calculateDate(deliveryData,
 			function(error, result){
 				if (error) {
+					logger.error("Failed to calculate delivery date: " + error);
 					res.status(500).send(error);
 					return;
 				} else {
-					console.log("Delivery date calculated!");
+					logger.info("Delivery date calculated!");
 					res.json(result);
 				}
 			}

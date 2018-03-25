@@ -1,6 +1,8 @@
+var logger = require("../services/logger.js");
+
 module.exports = function(app) {
   app.post("/api/cards/authorize",function(req, res) {
-    console.log('Processing payment with card...');
+    logger.info('Processing payment with card...');
 
       var card = req.body;
 
@@ -13,7 +15,7 @@ module.exports = function(app) {
       var errors = req.validationErrors();
 
       if (errors){
-        console.log("Validation errors found");
+        logger.error("Validation errors found: " + errors);
 
         res.status(400).send(errors);
         return;
