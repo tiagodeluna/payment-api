@@ -6,18 +6,18 @@ if (!fs.existsSync("logs")) {
 	fs.mkdirSync("logs");
 }
 
-var logger = new winston.Logger({
+var logger = winston.createLogger({
 	transports: [
-		new winston.transports.Console(),
+		//new winston.transports.Console(),
 		new winston.transports.File({
-			name: "log1",
+			name: "combined_log",
 			level: "info",
 			filename: "logs/combined.log",
 			maxsize: 100000,
 			maxFiles: 10
 		}),
 		new winston.transports.File({
-			name: "log2",
+			name: "error_log",
 			level: "error",
 			filename: "logs/error.log",
 			maxsize: 100000,
@@ -27,11 +27,9 @@ var logger = new winston.Logger({
 });
 
 
-/*
+//Creates a Console Logger if not in Production
 if (process.env.NODE_ENV !== "production") {
-  logger.add(new winston.transports.Console({
-    format: winston.format.simple()
-  }));
+	logger.add(new winston.transports.Console());
 }
-*/
+
 module.exports = logger;

@@ -24,3 +24,4 @@
     - Linux: https://cursos.alura.com.br/course/nodejs-avancado/task/19586
     - Mac/Windows: https://cursos.alura.com.br/course/nodejs-avancado/task/19590
 4. Create the main file: index.js
+5. Create a module to manage the application cluster: cluster.js

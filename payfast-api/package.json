@@ -24,6 +24,6 @@
     "restify": "^6.3.4",
     "restify-clients": "^1.5.2",
     "soap": "^0.23.0",
-    "winston": "^2.4.1"
+    "winston": "^3.0.0-rc3"
   }
 }
