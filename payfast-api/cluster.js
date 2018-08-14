@@ -18,9 +18,13 @@ if (cluster.isMaster) {
 		logger.info("Connected thread: " + worker.process.pid);
 	});
 
+  	cluster.on("disconnect", worker => {
+        console.log("Thread %d disconnected", worker.process.pid);
+	});
+
 	//When a process is finished for some reason, a new process is created to replace it
 	cluster.on("exit", worker => {
-		logger.info("Disconnected thread: %d", worker.process.pid);
+		logger.info("Lost thread %d. Creating a new one...", worker.process.pid);
 		cluster.fork();
 	});
 
